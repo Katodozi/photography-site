@@ -58,10 +58,9 @@ export default function UploadZone({ onUploadComplete, currentPreview }: UploadZ
         const blob = await upload(file.name, file, {
           access: 'public',
           handleUploadUrl: '/api/blob/upload',
-          onUploadProgress: (e) => {
-            setProgress(Math.round((e.percentage || 0)));
-          },
         });
+
+        setProgress(100);
 
         onUploadComplete({
           imageUrl: blob.url,

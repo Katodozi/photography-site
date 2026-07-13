@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import HeroSection from '@/components/public/HeroSection';
-import PhotoGrid from '@/components/public/PhotoGrid';
 import AlbumCard from '@/components/public/AlbumCard';
 import CategoryPill from '@/components/public/CategoryPill';
 import InstagramSection from '@/components/public/InstagramSection';

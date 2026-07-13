@@ -12,8 +12,8 @@ export async function updateTagCounts(
   const oldSet = new Set(oldTagIds.map((id) => id.toString()));
   const newSet = new Set(newTagIds.map((id) => id.toString()));
 
-  const toDecrement = [...oldSet].filter((id) => !newSet.has(id));
-  const toIncrement = [...newSet].filter((id) => !oldSet.has(id));
+  const toDecrement = Array.from(oldSet).filter((id) => !newSet.has(id));
+  const toIncrement = Array.from(newSet).filter((id) => !oldSet.has(id));
 
   if (toDecrement.length) {
     await Tag.updateMany(

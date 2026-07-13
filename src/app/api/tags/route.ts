@@ -23,7 +23,11 @@ export async function GET() {
 
     const tagMap = new Map<string, Record<string, unknown>>();
     photos.forEach((photo) => {
-      const photoTags = photo.tags as Array<{ _id: unknown; name: string; slug: string }>;
+      const photoTags = photo.tags as unknown as Array<{
+        _id: unknown;
+        name: string;
+        slug: string;
+      }>;
       photoTags?.forEach((tag) => {
         const id = String(tag._id);
         if (!tagMap.has(id)) {

@@ -6,7 +6,6 @@ import Image from 'next/image';
 import AdminHeader from '@/components/admin/AdminHeader';
 import PhotoPicker from '@/components/admin/PhotoPicker';
 import type { IAlbum, IPhoto } from '@/types';
-import { slugify } from '@/lib/utils';
 
 export default function EditAlbumPage({ params }: { params: { id: string } }) {
   const router = useRouter();

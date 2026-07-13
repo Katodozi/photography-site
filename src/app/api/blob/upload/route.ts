@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { handleUpload } from '@vercel/blob';
+import { handleUpload } from '@vercel/blob/client';
 import { getSession } from '@/lib/auth';
 
 export async function POST(request: Request) {

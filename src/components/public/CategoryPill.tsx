@@ -12,7 +12,6 @@ interface CategoryPillProps {
 
 export default function CategoryPill({
   name,
-  slug,
   color = '#5C7A5A',
   active,
   onClick,

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { FaInstagram } from 'react-icons/fa';
 
 const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#';
