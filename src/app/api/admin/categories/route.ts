@@ -5,6 +5,7 @@ import Category from '@/models/Category';
 import Photo from '@/models/Photo';
 import { serializeDoc } from '@/lib/db-helpers';
 import { slugify } from '@/lib/utils';
+import { apiError } from '@/lib/api-helpers';
 
 export async function GET(request: Request) {
   const session = await getSession(request);
@@ -24,8 +25,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(categoriesWithCount);
   } catch (error) {
-    console.error('Admin categories fetch error:', error);
-    return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    return apiError(error, 'Admin categories fetch error:');
   }
 }
 

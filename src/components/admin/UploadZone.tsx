@@ -2,7 +2,6 @@
 
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
-import { upload } from '@vercel/blob/client';
 import { FiUploadCloud } from 'react-icons/fi';
 
 export interface UploadResult {
@@ -41,7 +40,7 @@ export default function UploadZone({ onUploadComplete, currentPreview }: UploadZ
 
       setError('');
       setUploading(true);
-      setProgress(0);
+      setProgress(10);
 
       const localPreview = URL.createObjectURL(file);
       setPreview(localPreview);
@@ -55,26 +54,38 @@ export default function UploadZone({ onUploadComplete, currentPreview }: UploadZ
           }
         );
 
-        const blob = await upload(file.name, file, {
-          access: 'public',
-          handleUploadUrl: '/api/blob/upload',
+        const formData = new FormData();
+        formData.append('file', file);
+
+        setProgress(40);
+
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
         });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Upload failed');
+        }
 
         setProgress(100);
 
         onUploadComplete({
-          imageUrl: blob.url,
-          thumbnailUrl: blob.url,
-          blobPathname: blob.pathname,
+          imageUrl: data.url,
+          thumbnailUrl: data.url,
+          blobPathname: data.pathname,
           width: dimensions.width,
           height: dimensions.height,
           fileSize: file.size,
         });
 
-        setPreview(blob.url);
+        setPreview(data.url);
       } catch (err) {
         console.error('Upload failed:', err);
-        setError('Upload failed. Please try again.');
+        setError(err instanceof Error ? err.message : 'Upload failed. Please try again.');
         setPreview(null);
       } finally {
         setUploading(false);

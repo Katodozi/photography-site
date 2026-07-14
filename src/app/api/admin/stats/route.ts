@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { list } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
+import { apiError } from '@/lib/api-helpers';
 import Photo from '@/models/Photo';
 import Album from '@/models/Album';
 import Category from '@/models/Category';
@@ -65,7 +66,6 @@ export async function GET(request: Request) {
       blobUsage,
     });
   } catch (error) {
-    console.error('Dashboard stats error:', error);
-    return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });
+    return apiError(error, 'Dashboard stats error:');
   }
 }

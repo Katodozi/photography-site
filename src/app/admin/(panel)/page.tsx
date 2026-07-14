@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import AdminHeader from '@/components/admin/AdminHeader';
+import AdminErrorBanner from '@/components/admin/AdminErrorBanner';
 import StatsCard from '@/components/admin/StatsCard';
 
 interface DashboardData {
@@ -27,15 +28,34 @@ interface DashboardData {
 
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/admin/stats')
-      .then((r) => r.json())
-      .then(setData);
+    fetch('/api/admin/stats', { credentials: 'same-origin' })
+      .then(async (r) => {
+        const json = await r.json();
+        if (!r.ok || !json.stats) {
+          setError(json.error || 'Failed to load dashboard');
+          return;
+        }
+        setData(json);
+      })
+      .catch(() => setError('Failed to load dashboard'))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (!data) {
+  if (loading) {
     return <div className="text-admin-muted">Loading dashboard...</div>;
+  }
+
+  if (error || !data) {
+    return (
+      <div>
+        <AdminHeader title="Dashboard" description="Overview of your photography site" />
+        <AdminErrorBanner message={error || 'Failed to load dashboard'} />
+      </div>
+    );
   }
 
   const { stats, recentPhotos } = data;
@@ -79,26 +99,30 @@ export default function AdminDashboard() {
       </div>
 
       <h2 className="mb-4 text-lg font-semibold text-admin-text">Recent Uploads</h2>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-        {recentPhotos.map((photo) => (
-          <Link
-            key={photo._id}
-            href={`/admin/photos/${photo._id}/edit`}
-            className="group overflow-hidden rounded-lg border border-admin-border"
-          >
-            <div className="relative aspect-square">
-              <Image
-                src={photo.thumbnailUrl || photo.imageUrl}
-                alt={photo.title}
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-                sizes="150px"
-              />
-            </div>
-            <p className="truncate p-2 text-xs text-admin-muted">{photo.title}</p>
-          </Link>
-        ))}
-      </div>
+      {recentPhotos.length === 0 ? (
+        <p className="text-sm text-admin-muted">No photos uploaded yet.</p>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
+          {recentPhotos.map((photo) => (
+            <Link
+              key={photo._id}
+              href={`/admin/photos/${photo._id}/edit`}
+              className="group overflow-hidden rounded-lg border border-admin-border"
+            >
+              <div className="relative aspect-square">
+                <Image
+                  src={photo.thumbnailUrl || photo.imageUrl}
+                  alt={photo.title}
+                  fill
+                  className="object-cover transition-transform group-hover:scale-105"
+                  sizes="150px"
+                />
+              </div>
+              <p className="truncate p-2 text-xs text-admin-muted">{photo.title}</p>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

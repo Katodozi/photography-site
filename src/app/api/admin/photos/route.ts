@@ -3,6 +3,7 @@ import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
 import { resolveTags, serializeDoc, updateTagCounts } from '@/lib/db-helpers';
+import { apiError } from '@/lib/api-helpers';
 
 export async function GET(request: Request) {
   const session = await getSession(request);
@@ -45,8 +46,7 @@ export async function GET(request: Request) {
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     });
   } catch (error) {
-    console.error('Admin photos fetch error:', error);
-    return NextResponse.json({ error: 'Failed to fetch photos' }, { status: 500 });
+    return apiError(error, 'Admin photos fetch error:');
   }
 }
 

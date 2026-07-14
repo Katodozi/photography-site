@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';
+import AdminErrorBanner from '@/components/admin/AdminErrorBanner';
 import PhotoTable from '@/components/admin/PhotoTable';
 import BulkActions from '@/components/admin/BulkActions';
 import type { IPhoto, IAlbum, ICategory } from '@/types';
