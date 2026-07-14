@@ -5,25 +5,48 @@ import type { SessionPayload } from '@/types';
 const COOKIE_NAME = 'admin_token';
 const TOKEN_EXPIRY = '7d';
 
-function getSecret() {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error('ADMIN_SECRET must be at least 32 characters');
-  }
+function readEnv(name: string): string | undefined {
+  const value = process.env[name];
+  if (!value) return undefined;
+  return value.trim().replace(/^["']|["']$/g, '');
+}
+
+function getSecret(): Uint8Array | null {
+  const secret = readEnv('ADMIN_SECRET');
+  if (!secret || secret.length < 32) return null;
   return new TextEncoder().encode(secret);
 }
 
+export function getAuthCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    maxAge: 60 * 60 * 24 * 7,
+    path: '/',
+  };
+}
+
 export async function signToken(username: string): Promise<string> {
+  const secret = getSecret();
+  if (!secret) {
+    throw new Error('ADMIN_SECRET must be at least 32 characters');
+  }
+
   return new SignJWT({ username })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(TOKEN_EXPIRY)
-    .sign(getSecret());
+    .sign(secret);
 }
 
 export async function verifyToken(token: string): Promise<SessionPayload | null> {
+  const secret = getSecret();
+  if (!secret) return null;
+
   try {
-    const { payload } = await jwtVerify(token, getSecret());
+    const decoded = decodeURIComponent(token);
+    const { payload } = await jwtVerify(decoded, secret);
     return payload as unknown as SessionPayload;
   } catch {
     return null;
@@ -54,22 +77,19 @@ export function getCookieName() {
 
 export async function setAuthCookie(token: string) {
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7,
-    path: '/',
-  });
+  cookieStore.set(COOKIE_NAME, token, getAuthCookieOptions());
 }
 
 export async function clearAuthCookie() {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  cookieStore.set(COOKIE_NAME, '', { ...getAuthCookieOptions(), maxAge: 0 });
 }
 
 export function validateCredentials(username: string, password: string): boolean {
-  const adminUser = process.env.ADMIN_USERNAME;
-  const adminPass = process.env.ADMIN_PASSWORD;
-  return username === adminUser && password === adminPass;
+  const adminUser = readEnv('ADMIN_USERNAME');
+  const adminPass = readEnv('ADMIN_PASSWORD');
+
+  if (!adminUser || !adminPass) return false;
+
+  return username.trim() === adminUser && password === adminPass;
 }

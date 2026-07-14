@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         bg: 'var(--bg)',
         surface: 'var(--surface)',
+        'surface-raised': 'var(--surface-raised)',
         border: 'var(--border)',
         text: 'var(--text)',
         muted: 'var(--muted)',
@@ -28,6 +29,17 @@ const config: Config = {
       fontFamily: {
         heading: ['var(--font-cormorant)', 'serif'],
         body: ['var(--font-inter)', 'sans-serif'],
+      },
+      boxShadow: {
+        photo: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        glow: '0 0 48px rgba(143, 168, 136, 0.12)',
+        card: '0 4px 24px rgba(0, 0, 0, 0.35)',
+      },
+      backgroundImage: {
+        'hero-fallback':
+          'radial-gradient(ellipse at 30% 20%, #1a2219 0%, #0a0a0a 50%, #0a0a0a 100%)',
+        'section-fade':
+          'linear-gradient(180deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%)',
       },
     },
   },

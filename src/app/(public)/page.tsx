@@ -30,23 +30,21 @@ export default async function HomePage() {
     <>
       <HeroSection featuredPhoto={heroPhoto} />
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <h2 className="font-heading text-3xl font-medium text-text md:text-4xl">
-          Featured Photos
-        </h2>
-        <p className="mt-2 text-muted">A curated selection from the collection</p>
+      <section className="mx-auto max-w-7xl px-6 py-24 animate-fade-up">
+        <h2 className="section-heading">Featured Photos</h2>
+        <p className="section-subheading">A curated selection from the collection</p>
         <div className="mt-8">
           <FeaturedGallery photos={featuredPhotos} />
         </div>
       </section>
 
       {albums.length > 0 && (
-        <section className="bg-surface py-20">
+        <section className="bg-surface py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between">
               <div>
-                <h2 className="font-heading text-3xl font-medium text-text">Albums</h2>
-                <p className="mt-2 text-muted">Explore photo collections</p>
+                <h2 className="section-heading">Albums</h2>
+                <p className="section-subheading">Explore photo collections</p>
               </div>
               <Link
                 href="/albums"
@@ -68,9 +66,9 @@ export default async function HomePage() {
       )}
 
       {categories.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-20">
-          <h2 className="font-heading text-3xl font-medium text-text">Categories</h2>
-          <p className="mt-2 text-muted">Browse by subject</p>
+        <section className="mx-auto max-w-7xl px-6 py-24">
+          <h2 className="section-heading">Categories</h2>
+          <p className="section-subheading">Browse by subject</p>
           <div className="mt-6 flex flex-wrap gap-3">
             {categories.map((cat) => (
               <CategoryPill
@@ -87,12 +85,12 @@ export default async function HomePage() {
 
       <InstagramSection />
 
-      <section className="border-t border-border bg-surface py-16">
+      <section className="border-t border-border bg-bg py-20">
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-heading text-2xl font-light italic text-text md:text-3xl">
+          <p className="font-heading text-2xl font-light italic leading-relaxed text-text md:text-3xl">
             Photographs from a time when the world moved slower,
           </p>
-          <p className="mt-2 font-heading text-2xl font-light italic text-muted md:text-3xl">
+          <p className="mt-3 font-heading text-2xl font-light italic leading-relaxed text-muted md:text-3xl">
             and nature still had room to breathe.
           </p>
         </div>

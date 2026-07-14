@@ -78,7 +78,7 @@ export default function GalleryPageClient() {
   };
 
   const selectClass =
-    'rounded-full border border-border bg-surface px-4 py-2 text-sm text-text outline-none';
+    'input-dark rounded-full px-4 py-2';
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-24">
@@ -130,7 +130,7 @@ export default function GalleryPageClient() {
       </div>
 
       {error && (
-        <p className="mt-8 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="mt-8 rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-400">
           {error}. Check that <code className="text-xs">MONGODB_URI</code> is set in{' '}
           <code className="text-xs">.env.local</code> and restart the dev server.
         </p>

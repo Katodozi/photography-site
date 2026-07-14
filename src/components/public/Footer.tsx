@@ -6,8 +6,8 @@ const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#';
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-surface">
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="text-center md:text-left">
             <p className="font-heading text-xl font-medium text-text">
               Passing Through 2000s
@@ -18,20 +18,20 @@ export default function Footer() {
           </div>
 
           <nav className="flex items-center gap-6">
-            <Link href="/" className="text-sm text-muted hover:text-accent">
+            <Link href="/" className="text-sm text-muted transition-colors hover:text-accent">
               Home
             </Link>
-            <Link href="/gallery" className="text-sm text-muted hover:text-accent">
+            <Link href="/gallery" className="text-sm text-muted transition-colors hover:text-accent">
               Gallery
             </Link>
-            <Link href="/albums" className="text-sm text-muted hover:text-accent">
+            <Link href="/albums" className="text-sm text-muted transition-colors hover:text-accent">
               Albums
             </Link>
             <a
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-muted hover:text-accent"
+              className="flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
             >
               <FaInstagram className="h-4 w-4" />
               Instagram
@@ -39,7 +39,7 @@ export default function Footer() {
           </nav>
         </div>
 
-        <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted">
+        <div className="mt-10 border-t border-border pt-8 text-center text-sm text-muted">
           © {new Date().getFullYear()} Passing Through 2000s. All rights reserved.
         </div>
       </div>

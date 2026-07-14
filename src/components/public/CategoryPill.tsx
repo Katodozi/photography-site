@@ -12,16 +12,16 @@ interface CategoryPillProps {
 
 export default function CategoryPill({
   name,
-  color = '#5C7A5A',
+  color = '#8fa888',
   active,
   onClick,
   href,
 }: CategoryPillProps) {
   const className = cn(
-    'inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium transition-all',
+    'inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300',
     active
-      ? 'text-white shadow-sm'
-      : 'bg-surface text-muted hover:bg-accent-light hover:text-accent'
+      ? 'text-bg shadow-glow'
+      : 'border border-border/60 bg-surface text-muted hover:border-accent/40 hover:text-text'
   );
 
   const style = active ? { backgroundColor: color } : undefined;

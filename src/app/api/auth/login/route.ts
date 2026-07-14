@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
-import { signToken, setAuthCookie, validateCredentials } from '@/lib/auth';
+import {
+  signToken,
+  validateCredentials,
+  getCookieName,
+  getAuthCookieOptions,
+} from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -13,12 +18,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = await signToken(username);
-    await setAuthCookie(token);
+    const token = await signToken(username.trim());
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    response.cookies.set(getCookieName(), token, getAuthCookieOptions());
+    return response;
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Login failed' }, { status: 500 });
+    const message =
+      error instanceof Error && error.message.includes('ADMIN_SECRET')
+        ? 'Server misconfigured: ADMIN_SECRET must be at least 32 characters'
+        : 'Login failed';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

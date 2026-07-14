@@ -3,23 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --bg: #FAFAF8;
-  --surface: #F4F2EE;
-  --border: #E8E4DC;
-  --text: #2C2C2C;
-  --muted: #8A8578;
-  --accent: #5C7A5A;
-  --accent-light: #EBF0EA;
-  --gold: #B8936A;
-  --white: #FFFFFF;
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-raised: #1c1c1c;
+  --border: #2a2a2a;
+  --text: #f0ede8;
+  --muted: #8a8580;
+  --accent: #8fa888;
+  --accent-light: #1a2219;
+  --gold: #c4a574;
+  --white: #ffffff;
 
-  --admin-bg: #0F172A;
-  --admin-surface: #1E293B;
-  --admin-border: #334155;
-  --admin-primary: #38BDF8;
-  --admin-accent: #10B981;
-  --admin-text: #F1F5F9;
-  --admin-muted: #94A3B8;
+  --admin-bg: #0a0a0a;
+  --admin-surface: #141414;
+  --admin-border: #2a2a2a;
+  --admin-primary: #8fa888;
+  --admin-accent: #c4a574;
+  --admin-text: #f0ede8;
+  --admin-muted: #8a8580;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -27,19 +32,127 @@ body {
   background: var(--bg);
 }
 
+::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--text);
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-wide;
+  }
+}
+
+@layer components {
+  .section-heading {
+    @apply font-heading text-3xl font-medium text-text md:text-4xl;
+  }
+
+  .section-subheading {
+    @apply mt-2 text-muted;
+  }
+
+  .glass-nav {
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(24px);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--accent);
+    padding: 0.75rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--bg);
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover {
+    background: color-mix(in srgb, var(--accent) 90%, transparent);
+    box-shadow: 0 0 48px rgba(143, 168, 136, 0.12);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+    background: transparent;
+    padding: 0.75rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--accent);
+    transition: all 0.3s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .photo-frame {
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    background: var(--surface);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    transition: all 0.5s;
+  }
+
+  .photo-frame:hover {
+    border-color: color-mix(in srgb, var(--border) 80%, transparent);
+    box-shadow: 0 0 48px rgba(143, 168, 136, 0.12);
+  }
+
+  .input-dark {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-dark:focus {
+    border-color: var(--accent);
+  }
+}
+
 @layer utilities {
   .masonry-grid {
-    column-gap: 1rem;
+    column-gap: 1.25rem;
   }
 
   .masonry-grid > * {
     break-inside: avoid;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .masonry-1 { columns: 1; }
   .masonry-2 { columns: 2; }
   .masonry-3 { columns: 3; }
+
+  @media (max-width: 768px) {
+    .masonry-2,
+    .masonry-3 {
+      columns: 1;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .masonry-3 {
+      columns: 2;
+    }
+  }
 
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -49,4 +162,35 @@ body {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .animate-fade-up {
+    animation: fadeUp 0.7s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, var(--gold), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
