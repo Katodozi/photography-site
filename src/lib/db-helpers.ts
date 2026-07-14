@@ -1,7 +1,31 @@
 import { connectDB } from '@/lib/mongodb';
 import Tag from '@/models/Tag';
+import Photo from '@/models/Photo';
 import { slugify } from '@/lib/utils';
 import type { Types } from 'mongoose';
+
+export type HomepageSlot = 'none' | 'hero' | 'cta';
+
+export async function assignHomepageSlot(
+  photoId: string,
+  slot: HomepageSlot
+): Promise<void> {
+  await connectDB();
+
+  if (slot === 'hero' || slot === 'cta') {
+    await Photo.updateMany(
+      { homepageSlot: slot, _id: { $ne: photoId } },
+      { $set: { homepageSlot: 'none' } }
+    );
+  }
+
+  await Photo.findByIdAndUpdate(photoId, {
+    $set: {
+      homepageSlot: slot,
+      ...(slot !== 'none' ? { featured: true } : {}),
+    },
+  });
+}
 
 export async function updateTagCounts(
   oldTagIds: Types.ObjectId[] = [],

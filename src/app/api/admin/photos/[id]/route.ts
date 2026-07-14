@@ -3,7 +3,7 @@ import { del } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
-import { resolveTags, serializeDoc, updateTagCounts } from '@/lib/db-helpers';
+import { resolveTags, serializeDoc, updateTagCounts, assignHomepageSlot } from '@/lib/db-helpers';
 
 export async function GET(
   request: Request,
@@ -51,7 +51,7 @@ export async function PATCH(
     const update: Record<string, unknown> = {};
     const fields = [
       'title', 'description', 'album', 'category', 'featured', 'status',
-      'location', 'dateTaken', 'order',
+      'location', 'dateTaken', 'order', 'homepageSlot',
     ];
 
     for (const field of fields) {
@@ -64,7 +64,16 @@ export async function PATCH(
       update.tags = newTagIds;
     }
 
-    const photo = await Photo.findByIdAndUpdate(params.id, update, { new: true })
+    if (body.homepageSlot !== undefined) {
+      await assignHomepageSlot(params.id, body.homepageSlot);
+      delete update.homepageSlot;
+    }
+
+    if (Object.keys(update).length) {
+      await Photo.findByIdAndUpdate(params.id, update);
+    }
+
+    const photo = await Photo.findById(params.id)
       .populate('album', 'name slug')
       .populate('category', 'name slug color')
       .populate('tags', 'name slug')

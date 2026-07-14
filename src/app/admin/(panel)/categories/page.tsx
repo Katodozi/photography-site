@@ -2,21 +2,32 @@
 
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
+import AdminErrorBanner from '@/components/admin/AdminErrorBanner';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import type { ICategory } from '@/types';
 import { slugify } from '@/lib/utils';
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [color, setColor] = useState('#5C7A5A');
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchCategories = () => {
-    fetch('/api/admin/categories')
-      .then((r) => r.json())
-      .then(setCategories);
+    fetch('/api/admin/categories', { credentials: 'same-origin' })
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok || !Array.isArray(data)) {
+          setError(data.error || 'Failed to load categories');
+          setCategories([]);
+          return;
+        }
+        setError(null);
+        setCategories(data);
+      })
+      .catch(() => setError('Failed to load categories'));
   };
 
   useEffect(() => {
@@ -54,6 +65,8 @@ export default function AdminCategoriesPage() {
   return (
     <div>
       <AdminHeader title="Categories" description="Organize photos by type" />
+
+      {error && <AdminErrorBanner message={error} />}
 
       <div className="mb-8 overflow-x-auto rounded-xl border border-admin-border">
         <table className="w-full text-sm">

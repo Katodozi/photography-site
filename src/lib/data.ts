@@ -8,7 +8,11 @@ import type { IPhoto, IAlbum, ICategory } from '@/types';
 export async function getFeaturedPhotos(limit = 6): Promise<IPhoto[]> {
   try {
     await connectDB();
-    const photos = await Photo.find({ status: 'published', featured: true })
+    const photos = await Photo.find({
+      status: 'published',
+      featured: true,
+      homepageSlot: { $nin: ['hero', 'cta'] },
+    })
       .populate('category', 'name slug color')
       .sort({ order: 1, createdAt: -1 })
       .limit(limit)
@@ -22,10 +26,46 @@ export async function getFeaturedPhotos(limit = 6): Promise<IPhoto[]> {
 export async function getHeroPhoto(): Promise<IPhoto | null> {
   try {
     await connectDB();
-    const photo = await Photo.findOne({ status: 'published', featured: true })
+    const photo = await Photo.findOne({
+      status: 'published',
+      homepageSlot: 'hero',
+    }).lean();
+
+    if (photo) {
+      return serializeDoc(photo as never) as unknown as IPhoto;
+    }
+
+    const fallback = await Photo.findOne({ status: 'published', featured: true })
       .sort({ order: 1, createdAt: -1 })
       .lean();
-    return photo ? (serializeDoc(photo as never) as unknown as IPhoto) : null;
+    return fallback ? (serializeDoc(fallback as never) as unknown as IPhoto) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getCtaPhoto(): Promise<IPhoto | null> {
+  try {
+    await connectDB();
+    const photo = await Photo.findOne({
+      status: 'published',
+      homepageSlot: 'cta',
+    }).lean();
+
+    if (photo) {
+      return serializeDoc(photo as never) as unknown as IPhoto;
+    }
+
+    const fallback = await Photo.findOne({
+      status: 'published',
+      featured: true,
+      homepageSlot: { $ne: 'hero' },
+    })
+      .sort({ order: 1, createdAt: -1 })
+      .skip(1)
+      .lean();
+
+    return fallback ? (serializeDoc(fallback as never) as unknown as IPhoto) : null;
   } catch {
     return null;
   }

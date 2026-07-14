@@ -11,6 +11,7 @@ import {
   FiSettings,
   FiLogOut,
   FiUpload,
+  FiLayout,
 } from 'react-icons/fi';
 import { cn } from '@/lib/utils';
 
@@ -18,6 +19,7 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: FiHome },
   { href: '/admin/photos', label: 'All Photos', icon: FiImage },
   { href: '/admin/photos/upload', label: 'Upload New', icon: FiUpload },
+  { href: '/admin/homepage', label: 'Homepage', icon: FiLayout },
   { href: '/admin/albums', label: 'Albums', icon: FiFolder },
   { href: '/admin/categories', label: 'Categories', icon: FiTag },
   { href: '/admin/tags', label: 'Tags', icon: FiHash },

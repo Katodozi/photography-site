@@ -28,7 +28,7 @@ const config: Config = {
       },
       fontFamily: {
         heading: ['var(--font-cormorant)', 'serif'],
-        body: ['var(--font-inter)', 'sans-serif'],
+        body: ['var(--font-dm-sans)', 'sans-serif'],
       },
       boxShadow: {
         photo: '0 8px 32px rgba(0, 0, 0, 0.45)',

@@ -11,6 +11,7 @@ export interface IPhoto {
   category: string | ICategory;
   tags: (string | ITag)[];
   featured: boolean;
+  homepageSlot: 'none' | 'hero' | 'cta';
   status: PhotoStatus;
   location?: string;
   dateTaken?: string;

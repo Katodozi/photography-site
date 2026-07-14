@@ -4,18 +4,29 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import AdminHeader from '@/components/admin/AdminHeader';
+import AdminErrorBanner from '@/components/admin/AdminErrorBanner';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import type { IAlbum, IPhoto } from '@/types';
 
 export default function AdminAlbumsPage() {
   const [albums, setAlbums] = useState<IAlbum[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchAlbums = () => {
-    fetch('/api/admin/albums')
-      .then((r) => r.json())
-      .then(setAlbums);
+    fetch('/api/admin/albums', { credentials: 'same-origin' })
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok || !Array.isArray(data)) {
+          setError(data.error || 'Failed to load albums');
+          setAlbums([]);
+          return;
+        }
+        setError(null);
+        setAlbums(data);
+      })
+      .catch(() => setError('Failed to load albums'));
   };
 
   useEffect(() => {
@@ -44,6 +55,8 @@ export default function AdminAlbumsPage() {
           New Album
         </Link>
       </AdminHeader>
+
+      {error && <AdminErrorBanner message={error} />}
 
       <div className="overflow-x-auto rounded-xl border border-admin-border">
         <table className="w-full text-sm">

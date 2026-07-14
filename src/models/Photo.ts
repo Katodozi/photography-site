@@ -10,6 +10,7 @@ export interface IPhotoDocument extends Document {
   category: mongoose.Types.ObjectId;
   tags: mongoose.Types.ObjectId[];
   featured: boolean;
+  homepageSlot: 'none' | 'hero' | 'cta';
   status: 'published' | 'draft';
   location?: string;
   dateTaken?: Date;
@@ -33,6 +34,11 @@ const PhotoSchema = new Schema<IPhotoDocument>(
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     featured: { type: Boolean, default: false },
+    homepageSlot: {
+      type: String,
+      enum: ['none', 'hero', 'cta'],
+      default: 'none',
+    },
     status: { type: String, enum: ['published', 'draft'], default: 'draft' },
     location: { type: String, default: '' },
     dateTaken: { type: Date },
@@ -46,6 +52,7 @@ const PhotoSchema = new Schema<IPhotoDocument>(
 );
 
 PhotoSchema.index({ status: 1, featured: 1 });
+PhotoSchema.index({ homepageSlot: 1 });
 PhotoSchema.index({ album: 1, order: 1 });
 PhotoSchema.index({ category: 1 });
 

@@ -52,6 +52,9 @@ export default function PhotoForm({
       : ''
   );
   const [featured, setFeatured] = useState(initialData?.featured || false);
+  const [homepageSlot, setHomepageSlot] = useState<'none' | 'hero' | 'cta'>(
+    initialData?.homepageSlot || 'none'
+  );
   const [status, setStatus] = useState<'published' | 'draft'>(
     initialData?.status || 'draft'
   );
@@ -66,8 +69,8 @@ export default function PhotoForm({
       fetch('/api/admin/albums').then((r) => r.json()),
       fetch('/api/admin/categories').then((r) => r.json()),
     ]).then(([albumsData, categoriesData]) => {
-      setAlbums(albumsData);
-      setCategories(categoriesData);
+      setAlbums(Array.isArray(albumsData) ? albumsData : []);
+      setCategories(Array.isArray(categoriesData) ? categoriesData : []);
     });
   }, []);
 
@@ -96,6 +99,7 @@ export default function PhotoForm({
         location,
         dateTaken: dateTaken || undefined,
         featured,
+        homepageSlot: status === 'published' ? homepageSlot : 'none',
         status,
         ...(uploadData && !initialData ? uploadData : {}),
       });
@@ -209,7 +213,7 @@ export default function PhotoForm({
             />
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-6">
             <label className="flex items-center gap-2 text-sm text-admin-text">
               <input
                 type="checkbox"
@@ -219,6 +223,22 @@ export default function PhotoForm({
               />
               Featured
             </label>
+            {status === 'published' && (
+              <div>
+                <label className={labelClass}>Homepage Display</label>
+                <select
+                  value={homepageSlot}
+                  onChange={(e) =>
+                    setHomepageSlot(e.target.value as 'none' | 'hero' | 'cta')
+                  }
+                  className={inputClass}
+                >
+                  <option value="none">Gallery only</option>
+                  <option value="hero">Hero background</option>
+                  <option value="cta">CTA background</option>
+                </select>
+              </div>
+            )}
             <div className="flex gap-4">
               <label className="flex items-center gap-2 text-sm text-admin-text">
                 <input

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
-import { resolveTags, serializeDoc, updateTagCounts } from '@/lib/db-helpers';
+import { resolveTags, serializeDoc, updateTagCounts, assignHomepageSlot } from '@/lib/db-helpers';
 import { apiError } from '@/lib/api-helpers';
 
 export async function GET(request: Request) {
@@ -70,6 +70,7 @@ export async function POST(request: Request) {
       category: body.category || undefined,
       tags: tagIds,
       featured: body.featured || false,
+      homepageSlot: body.homepageSlot || 'none',
       status: body.status || 'draft',
       location: body.location || '',
       dateTaken: body.dateTaken || undefined,
@@ -83,7 +84,12 @@ export async function POST(request: Request) {
       await updateTagCounts([], tagIds);
     }
 
-    return NextResponse.json(serializeDoc(photo), { status: 201 });
+    if (body.homepageSlot && body.homepageSlot !== 'none') {
+      await assignHomepageSlot(String(photo._id), body.homepageSlot);
+    }
+
+    const saved = await Photo.findById(photo._id).lean();
+    return NextResponse.json(serializeDoc(saved as never), { status: 201 });
   } catch (error) {
     console.error('Photo create error:', error);
     return NextResponse.json({ error: 'Failed to create photo' }, { status: 500 });
