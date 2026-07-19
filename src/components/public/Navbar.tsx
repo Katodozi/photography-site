@@ -1,7 +1,5 @@
 'use client';
 
-
-import logo from '@/public/logo.png';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -56,7 +54,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
       <Link href="/" className="flex items-center">
   <Image
-    src="/logo.png"
+    src="/site-logo2.png"
     alt="Passing Through 2000s"
     width={300}
     height={80}
