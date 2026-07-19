@@ -1,10 +1,13 @@
 'use client';
 
+
+import logo from '@/public/logo.png';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useSiteModals } from './SiteModalsProvider';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -51,15 +54,19 @@ export default function Navbar() {
       )}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link
-          href="/"
-          className={cn(
-            'font-heading text-xl font-medium tracking-wide transition-colors duration-300 md:text-2xl',
-            showSolid ? 'text-text' : 'text-white'
-          )}
-        >
-          Passing Through 2000s
-        </Link>
+      <Link href="/" className="flex items-center">
+  <Image
+    src="/logo.png"
+    alt="Passing Through 2000s"
+    width={300}
+    height={80}
+    className={cn(
+      'h-20 w-64 object-contain transition-all duration-300 md:h-20 md:w-64',
+      !showSolid && 'brightness-0 invert'
+    )}
+    priority
+  />
+</Link>
 
         <div className="flex items-center gap-6 md:gap-8">
           <ul className="hidden items-center gap-6 sm:flex md:gap-8">
