@@ -7,7 +7,7 @@ import CategoryPill from '@/components/public/CategoryPill';
 import InstagramSection from '@/components/public/InstagramSection';
 import FeaturedGallery from '@/components/public/FeaturedGallery';
 import {
-  getFeaturedPhotos,
+  getPhotosGroupedByCategory,
   getHeroPhoto,
   getCtaPhoto,
   getPublishedAlbums,
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [heroPhoto, ctaPhoto, featuredPhotos, albums, categories] = await Promise.all([
+  const [heroPhoto, ctaPhoto, categoryPhotoGroups, albums, categories] = await Promise.all([
     getHeroPhoto(),
     getCtaPhoto(),
-    getFeaturedPhotos(12),
+    getPhotosGroupedByCategory(),
     getPublishedAlbums(),
     getCategories(),
   ]);
@@ -43,10 +43,10 @@ export default async function HomePage() {
             </p>
             <h2 className="section-heading mt-3">Featured Photos</h2>
             <p className="section-subheading">
-              Scroll through highlights organized by category — each row tells a different story.
+              Scroll horizontally through every published photo, organized by category.
             </p>
           </div>
-          <FeaturedGallery photos={featuredPhotos} />
+          <FeaturedGallery groups={categoryPhotoGroups} />
         </div>
       </section>
 

@@ -24,6 +24,64 @@ export async function getFeaturedPhotos(limit = 6): Promise<IPhoto[]> {
   }
 }
 
+export interface CategoryPhotoGroup {
+  category: ICategory;
+  photos: IPhoto[];
+}
+
+export async function getPhotosGroupedByCategory(): Promise<CategoryPhotoGroup[]> {
+  noStore();
+  try {
+    await connectDB();
+
+    const photos = await Photo.find({
+      status: 'published',
+      homepageSlot: { $nin: ['hero', 'cta'] },
+      category: { $exists: true, $ne: null },
+    })
+      .populate('category', 'name slug color')
+      .sort({ order: 1, createdAt: -1 })
+      .lean();
+
+    const groupMap = new Map<string, CategoryPhotoGroup>();
+
+    for (const photo of photos) {
+      const cat = photo.category as unknown as {
+        _id: unknown;
+        name: string;
+        slug: string;
+        color: string;
+      } | null;
+      if (!cat || !cat.slug) continue;
+
+      const key = String(cat._id);
+      const serialized = serializeDoc(photo as never) as unknown as IPhoto;
+
+      if (groupMap.has(key)) {
+        groupMap.get(key)!.photos.push(serialized);
+      } else {
+        groupMap.set(key, {
+          category: {
+            _id: String(cat._id),
+            name: cat.name,
+            slug: cat.slug,
+            color: cat.color || '#5ed33d',
+            description: '',
+            createdAt: '',
+          },
+          photos: [serialized],
+        });
+      }
+    }
+
+    return Array.from(groupMap.values()).sort((a, b) =>
+      a.category.name.localeCompare(b.category.name)
+    );
+  } catch {
+    return [];
+  }
+}
+
 export async function getHeroPhoto(): Promise<IPhoto | null> {
   noStore();
   try {
