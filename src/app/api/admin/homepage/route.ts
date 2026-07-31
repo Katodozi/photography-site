@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
@@ -55,6 +56,8 @@ export async function PATCH(request: Request) {
     }
 
     await assignHomepageSlot(photoId, slot);
+
+    revalidatePath('/');
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -14,6 +14,8 @@ import {
   getCategories,
 } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Passing Through 2000s',
   description:

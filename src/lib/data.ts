@@ -4,6 +4,7 @@ import Album from '@/models/Album';
 import Category from '@/models/Category';
 import { serializeDoc } from '@/lib/db-helpers';
 import type { IPhoto, IAlbum, ICategory } from '@/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getFeaturedPhotos(limit = 6): Promise<IPhoto[]> {
   try {
@@ -24,6 +25,7 @@ export async function getFeaturedPhotos(limit = 6): Promise<IPhoto[]> {
 }
 
 export async function getHeroPhoto(): Promise<IPhoto | null> {
+  noStore();
   try {
     await connectDB();
     const photo = await Photo.findOne({
@@ -45,6 +47,7 @@ export async function getHeroPhoto(): Promise<IPhoto | null> {
 }
 
 export async function getCtaPhoto(): Promise<IPhoto | null> {
+  noStore();
   try {
     await connectDB();
     const photo = await Photo.findOne({

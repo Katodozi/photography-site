@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { del } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
@@ -72,6 +73,8 @@ export async function PATCH(
     if (Object.keys(update).length) {
       await Photo.findByIdAndUpdate(params.id, update);
     }
+
+    revalidatePath('/');
 
     const photo = await Photo.findById(params.id)
       .populate('album', 'name slug')

@@ -56,7 +56,10 @@ PhotoSchema.index({ homepageSlot: 1 });
 PhotoSchema.index({ album: 1, order: 1 });
 PhotoSchema.index({ category: 1 });
 
-const Photo: Model<IPhotoDocument> =
-  mongoose.models.Photo || mongoose.model<IPhotoDocument>('Photo', PhotoSchema);
+if (mongoose.models.Photo) {
+  delete mongoose.models.Photo;
+}
+
+const Photo: Model<IPhotoDocument> = mongoose.model<IPhotoDocument>('Photo', PhotoSchema);
 
 export default Photo;

@@ -25,7 +25,7 @@ export default function HeroSection({ featuredPhoto }: HeroSectionProps) {
 
       <div className="relative z-10 px-6 text-center text-white animate-fade-up">
         <p className="mb-4 text-sm uppercase tracking-[0.3em] text-white/60">
-          Nature Photography
+          Mobile Photography
         </p>
         <h1 className="font-heading text-5xl font-light tracking-wide md:text-7xl lg:text-8xl">
           Passing Through 2000s

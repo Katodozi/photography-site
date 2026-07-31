@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSession } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
@@ -86,7 +87,11 @@ export async function POST(request: Request) {
 
     if (body.homepageSlot && body.homepageSlot !== 'none') {
       await assignHomepageSlot(String(photo._id), body.homepageSlot);
+    } else if (body.homepageSlot === 'none') {
+      await assignHomepageSlot(String(photo._id), 'none');
     }
+
+    revalidatePath('/');
 
     const saved = await Photo.findById(photo._id).lean();
     return NextResponse.json(serializeDoc(saved as never), { status: 201 });
