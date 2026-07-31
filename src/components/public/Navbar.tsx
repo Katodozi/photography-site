@@ -52,14 +52,14 @@ export default function Navbar() {
       )}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/" className="flex items-center">
+      <Link href="/" className="flex items-center">
           <NextImage
             src="/OG-site-logo.png"
             alt="Passing Through 2000s"
             width={1200}
             height={80}
             className={cn(
-              'h-20 w-72 object-contain transition-all duration-300 md:h-20 md:w-72',
+              'h-24 w-80 object-contain transition-all duration-300 md:h-28 md:w-96',
               !showSolid && 'brightness-0 invert'
             )}
             priority
