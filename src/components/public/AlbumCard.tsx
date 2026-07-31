@@ -12,7 +12,7 @@ export default function AlbumCard({ album }: AlbumCardProps) {
   return (
     <Link
       href={`/albums/${album.slug}`}
-      className="group block overflow-hidden rounded-xl border border-border/40 bg-surface shadow-card transition-all duration-500 hover:border-border hover:shadow-glow hover:-translate-y-1"
+      className="group block overflow-hidden rounded-xl border border-border/50 bg-surface-raised shadow-card transition-all duration-500 hover:border-accent/30 hover:shadow-glow hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {cover ? (

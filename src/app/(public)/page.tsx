@@ -26,7 +26,7 @@ export default async function HomePage() {
   const [heroPhoto, ctaPhoto, featuredPhotos, albums, categories] = await Promise.all([
     getHeroPhoto(),
     getCtaPhoto(),
-    getFeaturedPhotos(6),
+    getFeaturedPhotos(12),
     getPublishedAlbums(),
     getCategories(),
   ]);
@@ -35,17 +35,25 @@ export default async function HomePage() {
     <>
       <HeroSection featuredPhoto={heroPhoto} />
 
-      <section className="mx-auto max-w-7xl px-6 py-24 animate-fade-up">
-        <h2 className="section-heading">Featured Photos</h2>
-        <p className="section-subheading">A curated selection from the collection</p>
-        <div className="mt-10">
+      <section className="section-featured relative py-24 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="mb-12 max-w-2xl animate-fade-up">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              Curated Selection
+            </p>
+            <h2 className="section-heading mt-3">Featured Photos</h2>
+            <p className="section-subheading">
+              Scroll through highlights organized by category — each row tells a different story.
+            </p>
+          </div>
           <FeaturedGallery photos={featuredPhotos} />
         </div>
       </section>
 
       {albums.length > 0 && (
-        <section className="bg-surface py-24">
-          <div className="mx-auto max-w-7xl px-6">
+        <section className="relative bg-surface py-24 md:py-28">
+          <div className="pointer-events-none absolute inset-0 bg-mesh opacity-60" />
+          <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between">
               <div>
                 <h2 className="section-heading">Albums</h2>
