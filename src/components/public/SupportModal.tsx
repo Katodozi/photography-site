@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FiHeart, FiMail, FiMessageCircle, FiX } from 'react-icons/fi';
 
 const EMAIL = 'anuzbhattarai12@gmail.com';
-const DONATE_URL = process.env.NEXT_PUBLIC_DONATE_URL || '';
+const QR_IMAGE = '/donate-qr-placeholder.svg';
 
 interface SupportModalProps {
   open: boolean;
@@ -13,17 +13,26 @@ interface SupportModalProps {
 
 export default function SupportModal({ open, onClose }: SupportModalProps) {
   const [feedback, setFeedback] = useState('');
+  const [showQr, setShowQr] = useState(false);
 
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    if (!open) {
+      setShowQr(false);
+      return;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showQr) setShowQr(false);
+        else onClose();
+      }
+    };
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKey);
     };
-  }, [open, onClose]);
+  }, [open, onClose, showQr]);
 
   if (!open) return null;
 
@@ -56,25 +65,14 @@ export default function SupportModal({ open, onClose }: SupportModalProps) {
         </p>
 
         <div className="mt-8 space-y-4">
-          {DONATE_URL ? (
-            <a
-              href={DONATE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-gold flex w-full items-center justify-center gap-2"
-            >
-              <FiHeart className="h-4 w-4" />
-              Support with a Donation
-            </a>
-          ) : (
-            <a
-              href={`mailto:${EMAIL}?subject=Donation%20Inquiry%20-%20Passing%20Through%202000s&body=Hi,%20I%20would%20like%20to%20support%20your%20photography%20journey.`}
-              className="btn-gold flex w-full items-center justify-center gap-2"
-            >
-              <FiHeart className="h-4 w-4" />
-              One drop for a camera
-            </a>
-          )}
+          <button
+            type="button"
+            onClick={() => setShowQr(true)}
+            className="btn-gold flex w-full items-center justify-center gap-2"
+          >
+            <FiHeart className="h-4 w-4" />
+            One drop for a camera
+          </button>
 
           <div className="rounded-xl border border-border bg-bg p-4">
             <label className="mb-2 flex items-center gap-2 text-sm font-medium text-text">
@@ -95,6 +93,46 @@ export default function SupportModal({ open, onClose }: SupportModalProps) {
           </div>
         </div>
       </div>
+
+      {showQr && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Close QR code"
+            onClick={() => setShowQr(false)}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+          />
+          <div className="relative z-10 w-full max-w-sm animate-fade-up rounded-2xl border border-border bg-surface p-6 shadow-elevated">
+            <button
+              type="button"
+              onClick={() => setShowQr(false)}
+              className="absolute right-3 top-3 rounded-full p-2 text-muted transition-colors hover:bg-surface-raised hover:text-text"
+            >
+              <FiX className="h-5 w-5" />
+            </button>
+
+            <p className="text-xs uppercase tracking-[0.25em] text-gold">Support</p>
+            <h3 className="mt-2 font-heading text-xl font-medium text-text">
+              Scan to contribute
+            </h3>
+            <p className="mt-2 text-sm text-muted">
+              Every drop helps me get closer to a proper camera for this archive.
+            </p>
+
+            <div className="mx-auto mt-6 w-full max-w-[240px] overflow-hidden rounded-xl border border-border bg-white p-3">
+              <img
+                src={QR_IMAGE}
+                alt="Donation QR code"
+                className="aspect-square w-full object-contain p-2"
+              />
+            </div>
+
+            <p className="mt-4 text-center text-xs text-muted">
+              Thank you for supporting this journey.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
