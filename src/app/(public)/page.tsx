@@ -35,15 +35,15 @@ export default async function HomePage() {
     <>
       <HeroSection featuredPhoto={heroPhoto} />
 
-      <section className="section-featured relative py-24 md:py-28">
-        <div className="relative mx-auto max-w-7xl px-6">
-          <div className="mb-12 max-w-2xl animate-fade-up">
+      <section className="section-featured relative">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 max-w-2xl animate-fade-up">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Curated Selection
             </p>
             <h2 className="section-heading mt-3">Featured Photos</h2>
             <p className="section-subheading">
-              Scroll horizontally through every published photo, organized by category.
+              Browse by category — swipe or scroll each row to explore the collection.
             </p>
           </div>
           <FeaturedGallery groups={categoryPhotoGroups} />

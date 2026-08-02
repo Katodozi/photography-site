@@ -29,27 +29,27 @@ export default function FeaturedGallery({ groups }: FeaturedGalleryProps) {
 
   return (
     <>
-      <div className="relative -mx-6 space-y-12 md:-mx-0">
+      <div className="relative space-y-10">
         {groups.map(({ category, photos }, rowIndex) => (
           <div
             key={category._id}
             className="animate-stagger-in"
-            style={{ animationDelay: `${rowIndex * 120}ms` }}
+            style={{ animationDelay: `${rowIndex * 100}ms` }}
           >
             <div className="category-row-header">
               <span
-                className="category-dot"
+                className="category-dot shrink-0"
                 style={{ color: category.color, backgroundColor: category.color }}
               />
-              <h3 className="font-heading text-xl font-medium text-text md:text-2xl">
+              <h3 className="font-heading text-lg font-medium text-text md:text-xl">
                 {category.name}
               </h3>
-              <span className="ml-2 text-xs text-muted">
-                {photos.length} photo{photos.length !== 1 ? 's' : ''}
+              <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
+                {photos.length} photos · scroll →
               </span>
             </div>
 
-            <div className="featured-scroll-row scrollbar-hide">
+            <div className="featured-scroll-row">
               {photos.map((photo) => (
                 <button
                   key={photo._id}
@@ -63,21 +63,15 @@ export default function FeaturedGallery({ groups }: FeaturedGalleryProps) {
                       alt={photo.title}
                       fill
                       className="object-cover"
-                      sizes="320px"
+                      sizes="280px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <p
-                        className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-                        style={{ color: category.color }}
-                      >
-                        {category.name}
-                      </p>
-                      <h4 className="mt-1 font-heading text-lg font-medium text-white">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 translate-y-1 p-3.5 transition-transform duration-300 group-hover:translate-y-0">
+                      <h4 className="font-heading text-base font-medium leading-snug text-white">
                         {photo.title}
                       </h4>
                       {photo.location && (
-                        <p className="mt-0.5 text-xs text-white/60">{photo.location}</p>
+                        <p className="mt-0.5 text-[11px] text-white/55">{photo.location}</p>
                       )}
                     </div>
                   </div>

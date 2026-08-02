@@ -48,7 +48,7 @@ export default function SupportModal({ open, onClose }: SupportModalProps) {
 
         <p className="text-xs uppercase tracking-[0.25em] text-gold">Community</p>
         <h2 className="mt-3 font-heading text-3xl font-medium text-text">
-          Help Me on This Journey
+          Help Me Buy a Camera
         </h2>
         <p className="mt-4 leading-relaxed text-muted">
           This archive is a personal passion project. Your support — whether through a
@@ -72,7 +72,7 @@ export default function SupportModal({ open, onClose }: SupportModalProps) {
               className="btn-gold flex w-full items-center justify-center gap-2"
             >
               <FiHeart className="h-4 w-4" />
-              Support This Project
+              One drop for a camera
             </a>
           )}
 

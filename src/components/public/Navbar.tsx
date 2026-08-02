@@ -20,54 +20,56 @@ export default function Navbar() {
   const onHero = pathname === '/';
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll);
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const showSolid = scrolled || !onHero;
+  const lightText = onHero && !scrolled;
 
   const linkClass = (active: boolean) =>
     cn(
       'relative text-sm font-medium transition-colors duration-300',
-      showSolid
+      lightText
         ? active
+          ? 'text-white'
+          : 'text-white/75 hover:text-white'
+        : active
           ? 'text-accent'
           : 'text-muted hover:text-text'
-        : active
-          ? 'text-white'
-          : 'text-white/70 hover:text-white'
     );
 
-  const actionClass = showSolid
-    ? 'text-xs font-medium text-muted transition-colors hover:text-accent'
-    : 'text-xs font-medium text-white/70 transition-colors hover:text-white';
+  const actionClass = lightText
+    ? 'text-xs font-medium text-white/75 transition-colors hover:text-white'
+    : 'text-xs font-medium text-muted transition-colors hover:text-accent';
 
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        showSolid ? 'glass-nav shadow-card' : 'bg-transparent'
+        scrolled
+          ? 'border-b border-white/5 bg-black/20 backdrop-blur-md'
+          : 'border-b border-transparent bg-transparent'
       )}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-      <Link href="/" className="flex items-center">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center">
           <NextImage
             src="/OG-site-logo.png"
             alt="Passing Through 2000s"
             width={1200}
             height={80}
             className={cn(
-              'h-24 w-80 object-contain transition-all duration-300 md:h-28 md:w-96',
-              !showSolid && 'brightness-0 invert'
+              'h-24 w-80 object-contain object-left md:h-28 md:w-96',
+              lightText && 'brightness-0 invert'
             )}
             priority
           />
         </Link>
 
-        <div className="flex items-center gap-6 md:gap-8">
-          <ul className="hidden items-center gap-6 sm:flex md:gap-8">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <ul className="hidden items-center gap-5 sm:flex md:gap-6">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
@@ -78,7 +80,7 @@ export default function Navbar() {
                       <span
                         className={cn(
                           'absolute -bottom-1 left-0 h-px w-full',
-                          showSolid ? 'bg-accent' : 'bg-white/80'
+                          lightText ? 'bg-white/80' : 'bg-accent'
                         )}
                       />
                     )}
@@ -88,7 +90,7 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button type="button" onClick={() => openModal('collaborate')} className={actionClass}>
               Collaborate
             </button>

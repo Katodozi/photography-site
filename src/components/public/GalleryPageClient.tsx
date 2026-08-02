@@ -45,7 +45,11 @@ export default function GalleryPageClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? 'Failed to load photos');
+        const message =
+          typeof data.error === 'string' && data.error.length > 0
+            ? data.error
+            : 'Failed to load photos';
+        setError(message);
         if (!append) setPhotos([]);
         setHasMore(false);
         setLoading(false);
@@ -131,8 +135,13 @@ export default function GalleryPageClient() {
 
       {error && (
         <p className="mt-8 rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-400">
-          {error}. Check that <code className="text-xs">MONGODB_URI</code> is set in{' '}
-          <code className="text-xs">.env.local</code> and restart the dev server.
+          {error}
+          {error.includes('MONGODB_URI') || error.includes('not configured') ? (
+            <span className="mt-2 block text-xs text-red-400/80">
+              Add <code className="text-red-300">MONGODB_URI</code> to{' '}
+              <code className="text-red-300">.env.local</code> and restart the dev server.
+            </span>
+          ) : null}
         </p>
       )}
 

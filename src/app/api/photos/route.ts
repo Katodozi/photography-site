@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/models/Photo';
 import { serializeDoc } from '@/lib/db-helpers';
+import { apiError } from '@/lib/api-helpers';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
@@ -54,7 +57,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Photos fetch error:', error);
-    return NextResponse.json({ error: 'Failed to fetch photos' }, { status: 500 });
+    return apiError(error, 'Photos fetch error:');
   }
 }
