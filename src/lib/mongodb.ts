@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+// Register models before any populate() calls
+import '@/models/Album';
+import '@/models/Category';
+import '@/models/Photo';
+import '@/models/Tag';
+
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
